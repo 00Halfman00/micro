@@ -9,11 +9,12 @@ app.use(bodyParser.json());
 
 const postByIdWithComments = {};
 
-//route that listens to anything sending post on /events route
+app.get("/events", (req, res, next) => {
+  res.send(postByIdWithComments);
+})
+
 app.post('/events', (req, res, next) => {
   const { type, data } = req.body;
-  console.log('event type received in query server: ', type);
-  console.log('event data received in query server: ', data);
   switch (type) {
     case 'POST_CREATED':
       postByIdWithComments[data.id] = {
@@ -24,7 +25,7 @@ app.post('/events', (req, res, next) => {
       };
       break;
     case 'COMMENT_CREATED':
-      postByIdWithComments[data.postId].comments.push(data.content);
+      postByIdWithComments[data.postId].comments.push(data);
       break;
     default:
       '';

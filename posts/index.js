@@ -23,6 +23,7 @@ app.get('/posts', (req, res, next) => {
 });
 
 app.post('/posts', (req, res, next) => {
+  console.log('posting in post')
   const { title, content } = req.body;
   const id = randomBytes(4).toString('hex');
   const post = { id, title, content };
