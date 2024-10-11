@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const axios = require("axios");
+const axios = require('axios');
 const bodyParser = require('body-parser');
 const { randomBytes } = require('crypto');
 const PORT = 4001;
@@ -28,13 +28,14 @@ app.post('/posts/:id/comments', (req, res, next) => {
   const content = req.body.comment;
   const comments = commentsByPostsId[postId] || [];
   const id = randomBytes(4).toString('hex');
-  const comment = { id, content };
+  const status = 'pending';
+  const comment = { id, content, status };
   comments[comments.length] = comment;
   commentsByPostsId[postId] = comments;
 
   const event = {
     type: 'COMMENT_CREATED',
-    data: { postId, id, content },
+    data: { postId, id, content, status },
   };
 
   axios
@@ -45,9 +46,22 @@ app.post('/posts/:id/comments', (req, res, next) => {
 });
 
 app.post('/events', (req, res, next) => {
-  const event = req.body;
-  console.log('event received in comments server: ', event);
-  res.send({message: "event received. thx"});
+  const { type, data } = req.body;
+  console.log('event received in comments server: ', req.body);
+  switch (type) {
+    case 'COMMENT_MODERATED':
+      const comment = commentsByPostsId[data.postId].find(
+        (c) => c.id === data.id
+      );
+      comment.status = data.status;
+      const event = {
+        type: 'COMMENT_UPDATED',
+        data,
+      };
+      axios.post('http://localhost:4005/events', event).catch(e => console.error(e));
+  }
+
+  res.send({ message: 'event received. thx' });
 });
 
 app.listen(PORT, () =>

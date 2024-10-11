@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const axios = require('axios');
 const PORT = 4002;
 
 const app = express();
@@ -9,12 +10,7 @@ app.use(bodyParser.json());
 
 const postByIdWithComments = {};
 
-app.get("/events", (req, res, next) => {
-  res.send(postByIdWithComments);
-})
-
-app.post('/events', (req, res, next) => {
-  const { type, data } = req.body;
+const handleEvent = (type, data) => {
   switch (type) {
     case 'POST_CREATED':
       postByIdWithComments[data.id] = {
@@ -27,12 +23,39 @@ app.post('/events', (req, res, next) => {
     case 'COMMENT_CREATED':
       postByIdWithComments[data.postId].comments.push(data);
       break;
+    case 'COMMENT_UPDATED':
+      const comment = postByIdWithComments[data.postId].comments.find(
+        (c) => c.id === data.id
+      );
+      comment.status = data.status;
+      comment.content = data.content;
     default:
       '';
   }
-  console.log('postByIdWithComments: ', postByIdWithComments);
+};
+
+app.get('/events', (req, res, next) => {
+  res.send(postByIdWithComments);
+});
+
+app.post('/events', (req, res, next) => {
+  const { type, data } = req.body;
+  handleEvent(type, data);
+  console.log(req.body);
 
   res.send(postByIdWithComments);
 });
 
-app.listen(PORT, () => console.log(`query server listening on port: ${PORT}`));
+app.listen(PORT, () => {
+  axios
+    .get('http://localhost:4005/events')
+    .then(({ data }) => {
+      console.log("data: ", data)
+      data.forEach((e) => {
+        handleEvent(e.type, e.data);
+      });
+    })
+    .catch((e) => console.error(e));
+
+  console.log(`query server listening on port: ${PORT}`);
+});

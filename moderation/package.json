@@ -1,17 +1,16 @@
 {
-  "name": "query",
+  "name": "moderation",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start" : "nodmeon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.7",
-    "cors": "^2.8.5",
     "express": "^4.21.1"
   },
   "devDependencies": {
