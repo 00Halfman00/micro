@@ -6,7 +6,6 @@ const { randomBytes } = require('crypto');
 const cors = require('cors');
 const PORT = 4000;
 
-
 /*
   NOTE: The post server will send to "storage" (a database, eventually) only post info;
         that is, it will send to storage an object containing the post id, post title,
@@ -18,12 +17,12 @@ const posts = {};
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/posts', (req, res, next) => {
-  res.send(posts);
+app.get('/posts', (req, res, next) => { // for development purposes, but it is not really used, otherwise
+  res.send(posts); // but this is not being used to fetch posts
 });
 
-app.post('/posts', (req, res, next) => {
-  console.log('posting in post')
+app.post('/posts/create', (req, res, next) => {
+  console.log('posting in post');
   const { title, content } = req.body;
   const id = randomBytes(4).toString('hex');
   const post = { id, title, content };
@@ -35,7 +34,7 @@ app.post('/posts', (req, res, next) => {
   };
 
   axios
-    .post('http://localhost:4005/events', event)
+    .post('http://bus-srv:4005/events', event)
     .catch((e) => console.error(e));
 
   res.status(201).send(post);
@@ -44,7 +43,10 @@ app.post('/posts', (req, res, next) => {
 app.post('/events', (req, res, next) => {
   const event = req.body;
   console.log('event received in post server: ', event);
-  res.send({message: "event received. thx"});
+  res.send({ message: 'event received. thx' });
 });
 
-app.listen(PORT, () => console.log(`post server listening on port: ${PORT}`));
+app.listen(PORT, () => {
+  console.log('v10');
+  console.log(`post server listening on port: ${PORT}`);
+});

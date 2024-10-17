@@ -39,7 +39,7 @@ app.post('/posts/:id/comments', (req, res, next) => {
   };
 
   axios
-    .post('http://localhost:4005/events', event)
+    .post('http://bus-srv:4005/events', event)
     .catch((e) => console.error(e));
 
   res.status(201).send(comment);
@@ -58,7 +58,9 @@ app.post('/events', (req, res, next) => {
         type: 'COMMENT_UPDATED',
         data,
       };
-      axios.post('http://localhost:4005/events', event).catch(e => console.error(e));
+      axios
+        .post('http://bus-srv:4005/events', event)
+        .catch((e) => console.error(e));
   }
 
   res.send({ message: 'event received. thx' });

@@ -17,18 +17,15 @@ app.post('/events', (req, res, next) => {
           status: data.content.includes('warm') ? 'rejected' : 'approved',
         });
 
-
-        axios
-    .post('http://localhost:4005/events', event)
-    .catch((e) => console.error(e));
+      axios
+        .post('http://bus-srv:4005/events', event)
+        .catch((e) => console.error(e));
       break;
     default:
       '';
   }
 
   res.send({ message: 'event received' });
-
-  console.log('type of event received in moderation servers: ', type);
 });
 
 app.listen(PORT, () =>

@@ -48,7 +48,7 @@ app.post('/events', (req, res, next) => {
 
 app.listen(PORT, () => {
   axios
-    .get('http://localhost:4005/events')
+    .get('http://bus-srv:4005/events')
     .then(({ data }) => {
       console.log("data: ", data)
       data.forEach((e) => {
@@ -58,4 +58,5 @@ app.listen(PORT, () => {
     .catch((e) => console.error(e));
 
   console.log(`query server listening on port: ${PORT}`);
+  console.log("query server v10")
 });
