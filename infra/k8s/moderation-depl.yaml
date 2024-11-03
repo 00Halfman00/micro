@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: moderation
-          image: 00halfman00/moderation
+          image: name/moderation
 ---
 apiVersion: v1
 kind: Service

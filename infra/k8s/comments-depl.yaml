@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: comments
-          image: 00halfman00/comments
+          image: name/comments
 ---
 apiVersion: v1
 kind: Service
