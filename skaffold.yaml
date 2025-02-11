@@ -7,51 +7,51 @@ build:
   local:
     push: false
   artifacts:
-    - image: 00halfman00/bus
+    - image: yourHandle/bus
       context: bus
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "*.js"
+          - src: '*.js'
             dest: .
-    - image: 00halfman00/client
+    - image: yourHandle/client
       context: client
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "src/**/*.js"
+          - src: 'src/**/*.js'
             dest: .
-    - image: 00halfman00/comments
+    - image: yourHandle/comments
       context: comments
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "*.js"
+          - src: '*.js'
             dest: .
-    - image: 00halfman00/moderation
+    - image: yourHandle/moderation
       context: moderation
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "*.js"
+          - src: '*.js'
             dest: .
-    - image: 00halfman00/posts
+    - image: yourHandle/posts
       context: posts
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "*.js"
+          - src: '*.js'
             dest: .
-    - image: 00halfman00/query
+    - image: yourHandle/query
       context: query
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: "*.js"
+          - src: '*.js'
             dest: .
